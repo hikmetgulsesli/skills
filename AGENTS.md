@@ -211,6 +211,55 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
 
+
+## Pipeline Diagnostics
+
+### Known Issues & Solutions
+
+| Problem | Cause | Detection | Resolution |
+|---------|-------|-----------|------------|
+| Step loops forever | [missing: X] in input | Medic v4 / Pipeline Doctor | Auto-fail run + Discord alert |
+| Infinite claim loop | Step fails repeatedly | abandoned_count >= 5 | Auto-fail run |
+| Stuck step (>15min) | Agent crash / timeout | Medic v4 stuck check | Auto-unstick or auto-fail |
+| Limbo run | No active steps remain | Medic v4 limbo check | Auto-resume from failed step |
+
+### Diagnostic Commands
+
+```bash
+# Check active workflows
+antfarm workflow status
+
+# View pipeline doctor log
+tail -50 ~/.openclaw/logs/pipeline-doctor.log
+
+# Verify all fixes are active
+bash ~/.openclaw/scripts/fix-verify.sh
+
+# Run pipeline doctor manually
+bash ~/.openclaw/scripts/pipeline-doctor.sh
+
+# Check MC Medic logs (last 50 lines)
+journalctl -u mission-control --no-pager -n 50 | grep MEDIC
+
+# Query stuck steps directly
+sqlite3 ~/.openclaw/antfarm/antfarm.db "SELECT s.step_id, s.status, s.abandoned_count, r.workflow_id FROM steps s JOIN runs r ON r.id = s.run_id WHERE r.status = 'running' AND s.status IN ('running','pending');"
+```
+
+### Auto-Protection Layers
+
+1. **Source Guard (Patch 11):** `MISSING_INPUT_GUARD` in claimStep — blocks [missing:] at claim time
+2. **Medic v4 (MC):** Every 5min — detects loops, missing inputs, stuck steps, limbo runs
+3. **Pipeline Doctor:** Every 5min — standalone SQLite check (works even if MC is down)
+4. **Fix Verify:** Runs after antfarm-update — ensures all patches are applied
+
+### Escalation
+
+If a pipeline issue persists after auto-fix:
+1. Check `pipeline-doctor.log` and `journalctl -u mission-control`
+2. Run `fix-verify.sh` to check all patches
+3. If needed, manually fail the run: `sqlite3 ~/.openclaw/antfarm/antfarm.db "UPDATE runs SET status='failed' WHERE id='<run_id>';"`
+4. Alert Hikmet via Discord
+
 <!-- antfarm:workflows -->
 # Antfarm Workflow Policy
 

@@ -1,5 +1,18 @@
 # MEMORY.md - Uzun Vadeli Hafıza
 
+## Pipeline Koruma Sistemleri (18 Şubat 2026)
+
+**Deploy Edilen Koruma Katmanları:**
+1. **MISSING_INPUT_GUARD** (Patch 11) — claimStep() aşamasında [missing: X] bloklar
+2. **Medic v4** (Mission Control) — 5dk'da bir: loop + missing + diagnose + auto-fix + unstick + limbo
+3. **Pipeline Doctor** — 5dk'da bir: MC down olsa bile SQLite kontrolü yapar
+4. **Fix Verify** — antfarm-update sonrası 14 fix'i kontrol eder, Discord'a raporlar
+
+**Yeni Fonksiyonlar (antfarm-db.ts):**
+- detectInfiniteLoop(runId) — claim count >= 5 olan step'leri bulur
+- checkMissingInput(runId) — [missing: X] pattern'ini tespit eder
+- failEntireRun(runId, reason) — tüm step'leri fail eder + WAL checkpoint + Discord alert
+
 ## Haftalık Öz - 15 Şubat 2026
 
 ### Bu Haftanın Dersleri
