@@ -1,42 +1,112 @@
 # MEMORY.md - Uzun Vadeli Hafıza
 
-## Pipeline Koruma Sistemleri (18 Şubat 2026)
+Bu dosya, Hikmet Gülsesli (SeTRoX) ile olan tüm çalışmalarımızın kalıcı hafızasıdır.
 
-**Deploy Edilen Koruma Katmanları:**
-1. **MISSING_INPUT_GUARD** (Patch 11) — claimStep() aşamasında [missing: X] bloklar
-2. **Medic v4** (Mission Control) — 5dk'da bir: loop + missing + diagnose + auto-fix + unstick + limbo
-3. **Pipeline Doctor** — 5dk'da bir: MC down olsa bile SQLite kontrolü yapar
-4. **Fix Verify** — antfarm-update sonrası 14 fix'i kontrol eder, Discord'a raporlar
+---
 
-**Yeni Fonksiyonlar (antfarm-db.ts):**
-- detectInfiniteLoop(runId) — claim count >= 5 olan step'leri bulur
-- checkMissingInput(runId) — [missing: X] pattern'ini tespit eder
-- failEntireRun(runId, reason) — tüm step'leri fail eder + WAL checkpoint + Discord alert
+## 1. KİMLİK (Identity)
 
-## Haftalık Öz - 15 Şubat 2026
+### Ben (AI Asistan)
+- İsim: Belirlenmedi (henüz isim vermedi)
+- Sistem: OpenClaw
+- Versiyon: Güncel
 
-### Bu Haftanın Dersleri
+### Kullanıcı (Hikmet Gülsesli)
+- Takma ad: SeTRoX
+- Konum: Samsun, Türkiye
+- Zaman dilimi: Europe/Istanbul
+- Email: setrox@agentmail.to
 
-**Sistem Stabilitesi:**
-- Gateway ve Antfarm sorunsuz çalışıyor
-- RAM ve disk kullanımı düşük seviyede
+---
 
-**Tekrarlayan Sorunlar:**
-- 3 cron job timeout oluyor (session-cleanup, gunaydin, disk-kontrol)
-- Timeout süreleri yetersiz kalıyor
+## 2. PREFERANSLAR (Preferences)
 
-**Çözümler:**
-- Timeout sürelerini artırmak gerekiyor
-- Kısa süreli job'lar için model seçimi önemli
+### Çalışma Tercihleri
+- Antfarm/MC ile proje geliştirme tercih ediyor
+- Ben (AI) doğrudan kod yazmamalıyım, Antfarm üzerinden ilerlemeli
+- Proje durumunu MC'den takip ediyor
 
-### Model Kullanımı
+### Teknik Tercihler
+- Next.js 14 + React + TypeScript + Tailwind CSS
+- shadcn/ui bileşenleri
+- PostgreSQL (harici)
+- Port yapısı: 35xx (frontend), 45xx (backend)
 
-- MiniMax-M2.5 varsayılan model olarak kullanılıyor
-- Kimi-coding/k2p5 raporlama job'ları için kullanılıyor
-- Maliyet hedefi: ~$5-15/hafta
+### İletişim
+- Telegram öncelikli
+- WhatsApp bağlantısı var (zaman zaman kopuyor)
+- Discord aktif
 
-### Önümüzdeki Hafta
+---
 
-- Timeout ayarlarını düzelt
-- Health check sıklığını optimize et
-- Session cleanup script'ini gözden geçir
+## 3. KARARLAR (Decisions)
+
+| Tarih | Karar | Detay |
+|-------|-------|-------|
+| 2026-02-15 | Antfarm workflow kullanımı | Yeni projeler için Antfarm feature-dev workflow kullanılacak |
+| 2026-02-18 | DB şifre kuralları | 16+ karakter, büyük/küçük harf + rakam + özel karakter |
+| 2026-02-18 | Pipeline Doctor | 5dk'da çalışan koruma sistemi |
+| 2026-02-19 | Video arşivi | `/data/video-archive/` altında kategori bazlı saklama |
+| 2026-02-19 | Long-term memory | 5 bölümlük hafıza sistemi entegre edildi |
+
+---
+
+## 4. PROJELER (Projects)
+
+### Aktif Projeler
+| Proje | Repo | Port | Durum |
+|-------|------|------|-------|
+| Hızlı Okuma | /home/setrox/hizliokuma | 3517/4517 | Antfarm #20 çalışıyor |
+| Recipe Book | /home/setrox/recipe-book | 3516/4516 | Tamamlandı |
+| AgentViz | /home/setrox/agentviz | 3503 | Tamamlandı |
+
+### Tamamlananlar
+- Recipe Book (2026-02-18)
+- AgentViz (2026-02-18)
+- Pipeline Doctor sistemi (2026-02-18)
+
+---
+
+## 5. KİŞİLER (People)
+
+| İsim | Rol | Not |
+|------|-----|-----|
+| Hikmet Gülsesli | Kullanıcı | Sahip, yazılımcı |
+| - | SET takımı | Linear API bağlı |
+
+---
+
+## KURALLAR (Rules)
+
+✅ Her girdiye tarih ekle (YYYY-MM-DD)  
+✅ Her bilgiyi tek satırda tut (atomic)  
+✅ Hassas veri (şifre, API key, kişisel bilgi) Saklama  
+✅ Karar verirken USER.md ve SOUL.md'yi oku  
+✅ Günlük notları memory/YYYY-MM-DD.md'ye yaz  
+
+❌ Şifreleri asla hafızada tutma (sadece referans)  
+❌ Kimlik bilgileri saklama  
+
+---
+
+## ÖZ DENETİM (Self-Review)
+
+Haftada bir yapılacak:
+- [ ] memory/ dosyasındaki tekrarları temizle
+- [ ] Çelişkili bilgileri çöz
+- [ ] Eski projeleri arşivle
+- [ ] MEMORY.md'yi güncelle
+
+---
+
+## ESKİ NOTLAR (Arşiv)
+
+### PostgreSQL Bağlantıları
+- Host: 72.61.186.46:37550
+- Admin: postgres / lckdvtbwghdzhxxh
+
+### Pipeline Koruma Sistemleri
+- MISSING_INPUT_GUARD
+- Medic v4
+- Pipeline Doctor
+- Fix Verify

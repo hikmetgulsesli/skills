@@ -260,6 +260,50 @@ If a pipeline issue persists after auto-fix:
 3. If needed, manually fail the run: `sqlite3 ~/.openclaw/antfarm/antfarm.db "UPDATE runs SET status='failed' WHERE id='<run_id>';"`
 4. Alert Hikmet via Discord
 
+
+<!-- custom-rules:start — DO NOT PLACE INSIDE antfarm:workflows BLOCK -->
+## SLUG & NAMING
+- Slug: kebab-case, max 30 karakter (ornek: expense-tracker)
+- Service: <slug>.service | DB: slug'daki tire → underscore (expense_tracker)
+- Subdomain: <slug>.setrox.com.tr
+- Port: `references/port-registry.md`'den bos port sec, kayit ekle
+
+## GIT CONVENTIONS
+- Branch: <agent-id>/<kisa-slug> (ornek: flux/add-auth)
+- Commit: <tip>: <aciklama> (feat:, fix:, refactor:, docs:, chore:)
+- PR title: ayni format
+- Her commit'te 1 mantiksal degisiklik, dev commit'ler squash
+
+## HEALTH CHECK
+Her deploy edilen proje GET /health endpoint sunmali → { "status": "ok", "service": "<slug>" }
+Auto-deploy bu endpoint'i kontrol eder. Endpoint yoksa deploy BASARISIZ sayilir.
+
+## INTERNATIONALIZATION (i18n)
+- Her proje Turkce (varsayilan) + Ingilizce desteklemeli
+- Kutuphaneler: Next.js → next-intl, React/Vite → react-i18next
+- Tum UI string'leri locale dosyalarindan gelmeli (hardcode yasak)
+- Dil degistirici (TR/EN) arayuzde gorunur olmali (header veya footer)
+- Varsayilan dil: tr, fallback: en
+- Locale dosyalari: /messages/tr.json, /messages/en.json (veya /locales/)
+
+## INFRASTRUCTURE PROVISIONING (AUTOMATIC)
+Projeyi baslatmadan ONCE, proje ihtiyaclarini degerlendir ve task description'a ekle.
+Credentials: `references/infra-services.env`
+
+**Her proje baslatilirken otomatik olarak sunu yap:**
+1. DB her zaman PostgreSQL (varsayilan). Sadece static frontend (localStorage, no backend) ise DB ekleme
+2. DB gerekiyorsa → task description'a sunu ekle:
+   ```
+   DATABASE: PostgreSQL — create user "<slug>" with random password, create database "<slug>", write DATABASE_URL to .env
+   Admin: see references/infra-services.env
+   ```
+3. Cache/session/rate-limit gerekiyorsa → task'a ekle: `REDIS: see references/infra-services.env, use key prefix "<slug>:"`
+4. Dosya upload/resim gerekiyorsa → task'a ekle: `S3: MinIO, create bucket "<slug>", see references/infra-services.env`
+5. Sadece static frontend ise (localStorage, no backend) → hicbir sey ekleme
+
+**Kullanicinin bunu soylemesine gerek yok.** Sen projenin ne oldugunu anla, ihtiyaci belirle, otomatik ekle.
+<!-- custom-rules:end -->
+
 <!-- antfarm:workflows -->
 # Antfarm Workflow Policy
 

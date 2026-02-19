@@ -31,7 +31,11 @@ Things like:
 - Default speaker: Kitchen HomePod
 ```
 
-## Why Separate?
+## Video Arşivi
+
+Referans video arşivi: `/data/video-archive/`
+
+**Kullanım:** Bana bir video gönderdiğinde analiz edip bu dizine kaydederim. "Hatırladın mı?" dediğinde buradan bulurum.
 
 Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
 

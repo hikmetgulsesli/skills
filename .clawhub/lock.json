@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "linear": {
+      "version": "1.0.0",
+      "installedAt": 1771455742071
+    },
+    "playwright-scraper-skill": {
+      "version": "1.2.0",
+      "installedAt": 1771455793985
+    },
+    "agentmail": {
+      "version": "1.1.1",
+      "installedAt": 1771456036870
+    },
+    "automation-workflows": {
+      "version": "0.1.0",
+      "installedAt": 1771456690314
+    },
+    "nextjs-expert": {
+      "version": "1.0.0",
+      "installedAt": 1771456803818
+    },
+    "x-twitter": {
+      "version": "2.3.1",
+      "installedAt": 1771457787309
+    }
+  }
+}
