@@ -1,5 +1,9 @@
+node_modules/
+dist/
 .DS_Store
-__pycache__/
-.idea/
-.vscode/
-
+*.db
+*.sqlite
+*.sqlite3
+progress.txt
+progress*.txt
+.github/workflows/

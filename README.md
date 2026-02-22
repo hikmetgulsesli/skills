@@ -1,94 +1,205 @@
-> **Note:** This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see [agentskills.io](http://agentskills.io).
+# Setfarm
 
-# Skills
-Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that's creating documents with your company's brand guidelines, analyzing data using your organization's specific workflows, or automating personal tasks.
+<img src="https://raw.githubusercontent.com/hikmetgulsesli/setfarm/main/landing/logo.jpeg" alt="Setfarm" width="80">
 
-For more information, check out:
-- [What are skills?](https://support.claude.com/en/articles/12512176-what-are-skills)
-- [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude)
-- [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills)
-- [Equipping agents for the real world with Agent Skills](https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+**Build your agent team in [OpenClaw](https://docs.openclaw.ai) with one command.**
 
-# About This Repository
+You don't need to hire a dev team. You need to define one. Setfarm gives you a team of specialized AI agents — planner, developer, verifier, tester, reviewer — that work together in reliable, repeatable workflows. One install. Zero infrastructure.
 
-This repository contains skills that demonstrate what's possible with Claude's skills system. These skills range from creative applications (art, music, design) to technical tasks (testing web apps, MCP server generation) to enterprise workflows (communications, branding, etc.).
+### Install
 
-Each skill is self-contained in its own folder with a `SKILL.md` file containing the instructions and metadata that Claude uses. Browse through these skills to get inspiration for your own skills or to understand different patterns and approaches.
-
-Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power [Claude's document capabilities](https://www.anthropic.com/news/create-files) under the hood in the [`skills/docx`](./skills/docx), [`skills/pdf`](./skills/pdf), [`skills/pptx`](./skills/pptx), and [`skills/xlsx`](./skills/xlsx) subfolders. These are source-available, not open source, but we wanted to share these with developers as a reference for more complex skills that are actively used in a production AI application.
-
-## Disclaimer
-
-**These skills are provided for demonstration and educational purposes only.** While some of these capabilities may be available in Claude, the implementations and behaviors you receive from Claude may differ from what is shown in these skills. These skills are meant to illustrate patterns and possibilities. Always test skills thoroughly in your own environment before relying on them for critical tasks.
-
-# Skill Sets
-- [./skills](./skills): Skill examples for Creative & Design, Development & Technical, Enterprise & Communication, and Document Skills
-- [./spec](./spec): The Agent Skills specification
-- [./template](./template): Skill template
-
-# Try in Claude Code, Claude.ai, and the API
-
-## Claude Code
-You can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:
-```
-/plugin marketplace add anthropics/skills
+```bash
+curl -fsSL https://raw.githubusercontent.com/hikmetgulsesli/setfarm/v0.5.1/scripts/install.sh | bash
 ```
 
-Then, to install a specific set of skills:
-1. Select `Browse and install plugins`
-2. Select `anthropic-agent-skills`
-3. Select `document-skills` or `example-skills`
-4. Select `Install now`
+Or just tell your OpenClaw agent: **"install github.com/hikmetgulsesli/setfarm"**
 
-Alternatively, directly install either Plugin via:
-```
-/plugin install document-skills@anthropic-agent-skills
-/plugin install example-skills@anthropic-agent-skills
-```
+That's it. Run `setfarm workflow list` to see available workflows.
 
-After installing the plugin, you can use the skill by just mentioning it. For instance, if you install the `document-skills` plugin from the marketplace, you can ask Claude Code to do something like: "Use the PDF skill to extract the form fields from `path/to/some-file.pdf`"
+> **Not on npm.** Setfarm is installed from GitHub, not the npm registry. There is an unrelated `antfarm` package on npm — that's not this.
 
-## Claude.ai
+> **Requires Node.js >= 22.** If `antfarm` fails with a `node:sqlite` error, make sure you're running real Node.js 22+, not Bun's node wrapper (see [#54](https://github.com/hikmetgulsesli/setfarm/issues/54)).
 
-These example skills are all already available to paid plans in Claude.ai. 
-
-To use any skill from this repository or upload custom skills, follow the instructions in [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude#h_a4222fa77b).
-
-## Claude API
-
-You can use Anthropic's pre-built skills, and upload custom skills, via the Claude API. See the [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) for more.
-
-# Creating a Basic Skill
-
-Skills are simple to create - just a folder with a `SKILL.md` file containing YAML frontmatter and instructions. You can use the **template-skill** in this repository as a starting point:
-
-```markdown
----
-name: my-skill-name
-description: A clear description of what this skill does and when to use it
 ---
 
-# My Skill Name
+## What You Get: Agent Team Workflows
 
-[Add your instructions here that Claude will follow when this skill is active]
+### feature-dev `7 agents`
 
-## Examples
-- Example usage 1
-- Example usage 2
+Drop in a feature request. Get back a tested PR. The planner decomposes your task into stories. Each story gets implemented, verified, and tested in isolation. Failures retry automatically. Nothing ships without a code review.
 
-## Guidelines
-- Guideline 1
-- Guideline 2
+```
+plan → setup → implement → verify → test → PR → review
 ```
 
-The frontmatter requires only two fields:
-- `name` - A unique identifier for your skill (lowercase, hyphens for spaces)
-- `description` - A complete description of what the skill does and when to use it
+### security-audit `7 agents`
 
-The markdown content below contains the instructions, examples, and guidelines that Claude will follow. For more details, see [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills).
+Point it at a repo. Get back a security fix PR with regression tests. Scans for vulnerabilities, ranks by severity, patches each one, re-audits after all fixes are applied.
 
-# Partner Skills
+```
+scan → prioritize → setup → fix → verify → test → PR
+```
 
-Skills are a great way to teach Claude how to get better at using specific pieces of software. As we see awesome example skills from partners, we may highlight some of them here:
+### bug-fix `6 agents`
 
-- **Notion** - [Notion Skills for Claude](https://www.notion.so/notiondevs/Notion-Skills-for-Claude-28da4445d27180c7af1df7d8615723d0)
+Paste a bug report. Get back a fix with a regression test. Triager reproduces it, investigator finds root cause, fixer patches, verifier confirms. Zero babysitting.
+
+```
+triage → investigate → setup → fix → verify → PR
+```
+
+---
+
+## Why It Works
+
+- **Deterministic workflows** — Same workflow, same steps, same order. Not "hopefully the agent remembers to test."
+- **Agents verify each other** — The developer doesn't mark their own homework. A separate verifier checks every story against acceptance criteria.
+- **Fresh context, every step** — Each agent gets a clean session. No context window bloat. No hallucinated state from 50 messages ago.
+- **Retry and escalate** — Failed steps retry automatically. If retries exhaust, it escalates to you. Nothing fails silently.
+
+---
+
+## How It Works
+
+1. **Define** — Agents and steps in YAML. Each agent gets a persona, workspace, and strict acceptance criteria. No ambiguity about who does what.
+2. **Install** — One command provisions everything: agent workspaces, cron polling, subagent permissions. No Docker, no queues, no external services.
+3. **Run** — Agents poll for work independently. Claim a step, do the work, pass context to the next agent. SQLite tracks state. Cron keeps it moving.
+
+### Minimal by design
+
+YAML + SQLite + cron. That's it. No Redis, no Kafka, no container orchestrator. Setfarm is a TypeScript CLI with zero external dependencies. It runs wherever OpenClaw runs.
+
+### Built on the Ralph loop
+
+<img src="https://raw.githubusercontent.com/snarktank/ralph/main/ralph.webp" alt="Ralph" width="100">
+
+Each agent runs in a fresh session with clean context. Memory persists through git history and progress files — the same autonomous loop pattern from [Ralph](https://github.com/snarktank/ralph), scaled to multi-agent workflows.
+
+---
+
+## Quick Example
+
+```bash
+$ setfarm workflow install feature-dev
+✓ Installed workflow: feature-dev
+
+$ setfarm workflow run feature-dev "Add user authentication with OAuth"
+Run: a1fdf573
+Workflow: feature-dev
+Status: running
+
+$ setfarm workflow status "OAuth"
+Run: a1fdf573
+Workflow: feature-dev
+Steps:
+  [done   ] plan (planner)
+  [done   ] setup (setup)
+  [running] implement (developer)  Stories: 3/7 done
+  [pending] verify (verifier)
+  [pending] test (tester)
+  [pending] pr (developer)
+  [pending] review (reviewer)
+```
+
+---
+
+## Build Your Own
+
+The bundled workflows are starting points. Define your own agents, steps, retry logic, and verification gates in plain YAML and Markdown. If you can write a prompt, you can build a workflow.
+
+```yaml
+id: my-workflow
+name: My Custom Workflow
+agents:
+  - id: researcher
+    name: Researcher
+    workspace:
+      files:
+        AGENTS.md: agents/researcher/AGENTS.md
+
+steps:
+  - id: research
+    agent: researcher
+    input: |
+      Research {{task}} and report findings.
+      Reply with STATUS: done and FINDINGS: ...
+    expects: "STATUS: done"
+```
+
+Full guide: [docs/creating-workflows.md](docs/creating-workflows.md)
+
+---
+
+## Security
+
+You're installing agent teams that run code on your machine. We take that seriously.
+
+- **Curated repo only** — Setfarm only installs workflows from the official [hikmetgulsesli/setfarm](https://github.com/hikmetgulsesli/setfarm) repository. No arbitrary remote sources.
+- **Reviewed for prompt injection** — Every workflow is reviewed for prompt injection attacks and malicious agent files before merging.
+- **Community contributions welcome** — Want to add a workflow? Submit a PR. All submissions go through careful security review before they ship.
+- **Transparent by default** — Every workflow is plain YAML and Markdown. You can read exactly what each agent will do before you install it.
+
+---
+
+## Dashboard
+
+Monitor runs, track step progress, and view agent output in real time.
+
+![Setfarm dashboard](https://raw.githubusercontent.com/hikmetgulsesli/setfarm/main/assets/dashboard-screenshot.png)
+
+![Setfarm dashboard detail](https://raw.githubusercontent.com/hikmetgulsesli/setfarm/main/assets/dashboard-detail-screenshot.png)
+
+```bash
+setfarm dashboard              # Start on port 3333
+setfarm dashboard stop         # Stop
+setfarm dashboard status       # Check status
+```
+
+---
+
+## Commands
+
+### Lifecycle
+
+| Command | Description |
+|---------|-------------|
+| `setfarm install` | Install all bundled workflows |
+| `setfarm uninstall [--force]` | Full teardown (agents, crons, DB) |
+
+### Workflows
+
+| Command | Description |
+|---------|-------------|
+| `setfarm workflow run <id> <task>` | Start a run |
+| `setfarm workflow status <query>` | Check run status |
+| `setfarm workflow runs` | List all runs |
+| `setfarm workflow resume <run-id>` | Resume a failed run |
+| `setfarm workflow list` | List available workflows |
+| `setfarm workflow install <id>` | Install a single workflow |
+| `setfarm workflow uninstall <id>` | Remove a single workflow |
+
+### Management
+
+| Command | Description |
+|---------|-------------|
+| `setfarm dashboard` | Start the web dashboard |
+| `setfarm logs [<lines>]` | View recent log entries |
+
+---
+
+## Requirements
+
+- Node.js >= 22
+- [OpenClaw](https://github.com/openclaw/openclaw) **v2026.2.9+** running on the host
+  - Setfarm uses cron jobs for workflow orchestration. Older OpenClaw versions may not expose the cron tool via `/tools/invoke`. Setfarm will automatically fall back to the `openclaw` CLI, but keeping OpenClaw up to date is recommended: `npm update -g openclaw`
+- `gh` CLI for PR creation steps
+
+---
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+<p align="center">Part of the <a href="https://docs.openclaw.ai">OpenClaw</a> ecosystem · Built by <a href="https://ryancarson.com">Ryan Carson</a></p>
